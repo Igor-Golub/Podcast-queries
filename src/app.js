@@ -6,6 +6,9 @@ const input = form.querySelector('#question-input')
 const submitButton = form.querySelector('#submit-button')
 
 form.addEventListener('submit', submitFormHandler)
+input.addEventListener('input', () => {
+  submitButton.disabled = !isValid(input.value)
+})
 
 function submitFormHandler(event) {
   event.preventDefault()
