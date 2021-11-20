@@ -1,3 +1,4 @@
+import { Question } from './question'
 import { isValid } from './utils';
 import './stule.css'
 
@@ -5,6 +6,7 @@ const form = document.getElementById('form')
 const input = form.querySelector('#question-input')
 const submitButton = form.querySelector('#submit-button')
 
+window.addEventListener('load', Question.renderList)
 form.addEventListener('submit', submitFormHandler)
 input.addEventListener('input', () => {
   submitButton.disabled = !isValid(input.value)
@@ -22,10 +24,10 @@ function submitFormHandler(event) {
 
     submitButton.disabled = true
 
-    // Async request to server to save question
-    console.log('question', question)
-    input.value = ''
-    input.className = ''
-    submitButton.disabled = false
+    Question.create(question).then(() => {
+      input.value = ''
+      input.className = ''
+      submitButton.disabled = false
+    })
   }
 }
