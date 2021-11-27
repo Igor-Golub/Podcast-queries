@@ -26,6 +26,32 @@ export class Question {
     const list = document.getElementById('list')
     list.innerHTML = html
   }
+
+  static fetch(token) {
+    if (!token) {
+      return Promise.resolve('<p class="error">У вас нет токена</p>')
+    }
+    return fetch(`https://podcast-questions-app-5b442-default-rtdb.firebaseio.com/questions.json?auth=${token}`)
+      .then(res => res.json())
+      .then(res => {
+        if (res && res.error) {
+          return `<p class="error">${res.error}</p>`
+        }
+
+        return res
+          ? Object.keys(res).map(key => ({
+            ...res[key],
+            id: key,
+          }))
+          : []
+      })
+  }
+
+  static listToHTML(questions) {
+    return questions.length
+      ? `<ol>${questions.map(q => `<li>${q.text}</li>`).join('')}</ol>`
+      : `<p>Вопросов пока нет</p>`
+  }
 }
 
 const addToLocalStorage = (question) => {
